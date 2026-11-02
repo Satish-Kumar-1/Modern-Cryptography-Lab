@@ -1,0 +1,29 @@
+{
+  "name": "cryptoguard-desktop",
+  "version": "1.0.0",
+  "description": "Ed25519 Detached Digital Signature & Verification Desktop Application",
+  "main": "dist-electron/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:web": "tsc",
+    "build:electron": "tsc -p tsconfig.electron.json",
+    "build": "tsc && tsc -p tsconfig.electron.json",
+    "server": "python server.py"
+  },
+  "keywords": [
+    "ed25519",
+    "digital-signatures",
+    "cryptography",
+    "verification",
+    "electron",
+    "desktop-app",
+    "rfc8032"
+  ],
+  "author": "Aryan & Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "electron": "^45.1.0",
+    "typescript": "^7.0.2"
+  }
+}

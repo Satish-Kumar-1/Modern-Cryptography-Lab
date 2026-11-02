@@ -1,0 +1,5 @@
+# Core cryptographic library (RFC 8032 Ed25519 support)
+cryptography>=42.0.0
+
+# Testing framework (optional: tests also run via standard python -m unittest)
+pytest>=8.0.0

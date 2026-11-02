@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CryptoGuard ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Ed25519 Digital Signature & Verification</title>
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Vertical Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <span class="brand-badge">RFC 8032</span>
+        <h1 class="brand-title">CryptoGuard</h1>
+        <p class="brand-sub">Ed25519 Document Verification Suite</p>
+      </div>
+
+      <!-- Vertical Tabs -->
+      <nav class="sidebar-nav">
+        <button class="nav-tab-btn active" data-tab="verify">
+          <span class="tab-icon">&#128737;</span>
+          <span>Verify Document</span>
+        </button>
+
+        <button class="nav-tab-btn" data-tab="sign">
+          <span class="tab-icon">&#9997;</span>
+          <span>Sign Document</span>
+        </button>
+
+        <button class="nav-tab-btn" data-tab="keygen">
+          <span class="tab-icon">&#128273;</span>
+          <span>Generate Keys</span>
+        </button>
+
+        <button class="nav-tab-btn" data-tab="fingerprint">
+          <span class="tab-icon">&#128269;</span>
+          <span>Key Fingerprint</span>
+        </button>
+
+        <button class="nav-tab-btn" data-tab="experiments">
+          <span class="tab-icon">&#129514;</span>
+          <span>Security Lab</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div>University Cryptography Assessment</div>
+        <div>Project 4 &bull; Ed25519 Verification</div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Navigation Bar -->
+      <header class="topbar">
+        <div class="topbar-meta">
+          <span class="meta-pill">Curve25519 / SHA-512</span>
+          <span class="meta-pill">Pure In-Memory Processing</span>
+          <span class="meta-pill meta-pill-app" id="appModeBadge" style="display: none; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);">Ã¢Å¡Â¡ Desktop App (Electron)</span>
+        </div>
+
+        <button id="theme-toggle-btn" class="theme-toggle-btn">
+          <span id="theme-icon">&#9728;</span>
+          <span id="theme-text">Light Mode</span>
+        </button>
+      </header>
+
+      <!-- Content Views -->
+      <div class="content-body">
+        <!-- ============================================================== -->
+        <!-- TAB 1: VERIFY DOCUMENT                                         -->
+        <!-- ============================================================== -->
+        <section id="tab-verify" class="tab-panel active">
+          <div class="panel-header">
+            <h2 class="panel-title">Document Signature Verification</h2>
+            <p class="panel-desc">
+              Drag and drop any document, its detached 64-byte signature, and the signer's public key.
+              Verification operates purely on binary bytes without path dependencies.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="dropzone-grid">
+              <!-- Dropzone 1: Document -->
+              <div class="dropzone-wrapper">
+                <label class="dropzone-label">1. Original Document</label>
+                <div id="verify-doc-dropzone" class="dropzone">
+                  <input type="file" class="dropzone-file-input" />
+                  <div class="dropzone-idle">
+                    <span class="dropzone-icon">&#128196;</span>
+                    <span class="dropzone-text">Drop document here</span>
+                    <span class="dropzone-sub">or click to browse</span>
+                  </div>
+                  <div class="dropzone-preview hidden">
+                    <span class="preview-icon">&#128196;</span>
+                    <div class="preview-info">
+                      <div class="dropzone-file-name"></div>
+                      <div class="dropzone-file-size"></div>
+                    </div>
+                    <button class="dropzone-clear-btn" title="Remove file">&times;</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dropzone 2: Signature -->
+              <div class="dropzone-wrapper">
+                <label class="dropzone-label">2. Detached Signature (.sig)</label>
+                <div id="verify-sig-dropzone" class="dropzone">
+                  <input type="file" class="dropzone-file-input" accept=".sig" />
+                  <div class="dropzone-idle">
+                    <span class="dropzone-icon">&#128271;</span>
+                    <span class="dropzone-text">Drop .sig file here</span>
+                    <span class="dropzone-sub">Exact 64-byte Ed25519 signature</span>
+                  </div>
+                  <div class="dropzone-preview hidden">
+                    <span class="preview-icon">&#128271;</span>
+                    <div class="preview-info">
+                      <div class="dropzone-file-name"></div>
+                      <div class="dropzone-file-size"></div>
+                    </div>
+                    <button class="dropzone-clear-btn" title="Remove file">&times;</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dropzone 3: Public Key -->
+              <div class="dropzone-wrapper">
+                <label class="dropzone-label">3. Signer Public Key (.pem)</label>
+                <div id="verify-pub-dropzone" class="dropzone">
+                  <input type="file" class="dropzone-file-input" accept=".pem,.pub" />
+                  <div class="dropzone-idle">
+                    <span class="dropzone-icon">&#128273;</span>
+                    <span class="dropzone-text">Drop public key here</span>
+                    <span class="dropzone-sub">SPKI PEM format</span>
+                  </div>
+                  <div class="dropzone-preview hidden">
+                    <span class="preview-icon">&#128273;</span>
+                    <div class="preview-info">
+                      <div class="dropzone-file-name"></div>
+                      <div class="dropzone-file-size"></div>
+                    </div>
+                    <button class="dropzone-clear-btn" title="Remove file">&times;</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="btn-group">
+              <button id="btn-verify-submit" class="btn btn-primary">
+                <span>&#10004;</span>
+                <span>Verify Signature &amp; Integrity</span>
+              </button>
+              <button id="btn-load-sample-artifacts" class="btn btn-secondary">
+                <span>&#128214;</span>
+                <span>Load Sample Artifacts</span>
+              </button>
+              <button id="btn-verify-clear" class="btn btn-secondary">
+                <span>Reset</span>
+              </button>
+            </div>
+
+            <!-- Result Banner -->
+            <div id="verify-result-box" class="result-banner hidden">
+              <div id="verify-result-title" class="banner-title"></div>
+              <div id="verify-result-message" class="banner-message"></div>
+              <div id="verify-result-details" class="banner-details"></div>
+
+              <div id="verify-signer-fp-box" class="hidden" style="margin-top: 14px;">
+                <label class="form-label" style="font-size: 11px;">Signer Public-Key Fingerprint (Canonical SHA-256):</label>
+                <div class="mono-display">
+                  <code id="verify-signer-fp-value"></code>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- TAB 2: SIGN DOCUMENT                                           -->
+        <!-- ============================================================== -->
+        <section id="tab-sign" class="tab-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Detached Document Signing</h2>
+            <p class="panel-desc">
+              Create an exact 64-byte Ed25519 detached digital signature for any file.
+              The original document is untouched and non-repudiation is guaranteed.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="dropzone-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+              <!-- Dropzone: Document to Sign -->
+              <div class="dropzone-wrapper">
+                <label class="dropzone-label">Document to Sign</label>
+                <div id="sign-doc-dropzone" class="dropzone">
+                  <input type="file" class="dropzone-file-input" />
+                  <div class="dropzone-idle">
+                    <span class="dropzone-icon">&#128196;</span>
+                    <span class="dropzone-text">Drop document to sign</span>
+                    <span class="dropzone-sub">Any binary, PDF, text, or data file</span>
+                  </div>
+                  <div class="dropzone-preview hidden">
+                    <span class="preview-icon">&#128196;</span>
+                    <div class="preview-info">
+                      <div class="dropzone-file-name"></div>
+                      <div class="dropzone-file-size"></div>
+                    </div>
+                    <button class="dropzone-clear-btn" title="Remove file">&times;</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dropzone: Private Key -->
+              <div class="dropzone-wrapper">
+                <label class="dropzone-label">Signer Private Key (.pem / .key)</label>
+                <div id="sign-priv-dropzone" class="dropzone">
+                  <input type="file" class="dropzone-file-input" accept=".pem,.key,.pkcs8" />
+                  <div class="dropzone-idle">
+                    <span class="dropzone-icon">&#128272;</span>
+                    <span class="dropzone-text">Drop private key here</span>
+                    <span class="dropzone-sub">PKCS#8 PEM format (encrypted or plain)</span>
+                  </div>
+                  <div class="dropzone-preview hidden">
+                    <span class="preview-icon">&#128272;</span>
+                    <div class="preview-info">
+                      <div class="dropzone-file-name"></div>
+                      <div class="dropzone-file-size"></div>
+                    </div>
+                    <button class="dropzone-clear-btn" title="Remove file">&times;</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Passphrase Input -->
+            <div class="form-group" style="max-width: 480px;">
+              <label class="form-label">Private Key Passphrase</label>
+              <div class="input-with-action">
+                <input id="sign-passphrase" type="password" class="text-input" placeholder="Leave empty if key is unencrypted..." />
+                <button id="btn-toggle-sign-pass" type="button" class="btn btn-secondary" style="min-height: auto;">Show</button>
+              </div>
+            </div>
+
+            <div class="btn-group">
+              <button id="btn-sign-submit" class="btn btn-accent">
+                <span>&#9997;</span>
+                <span>Generate Detached Signature</span>
+              </button>
+            </div>
+
+            <!-- Sign Result Box -->
+            <div id="sign-result-box" class="result-banner banner-success hidden">
+              <div class="banner-title">&#10004; Document Signed Successfully!</div>
+              <div class="banner-message">Detached 64-byte Ed25519 signature generated.</div>
+              <div style="margin-top: 12px;">
+                <button id="btn-download-sig" class="btn btn-primary" style="background-color: #059669;">
+                  <span>&#128190;</span>
+                  <span>Download .sig Signature File</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- TAB 3: KEY GENERATION                                          -->
+        <!-- ============================================================== -->
+        <section id="tab-keygen" class="tab-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Ed25519 Key Pair Generation</h2>
+            <p class="panel-desc">
+              Generate a high-entropy asymmetric Ed25519 key pair with optional PKCS#8 AES-256 passphrase encryption.
+            </p>
+          </div>
+
+          <div class="card" style="max-width: 600px;">
+            <label class="checkbox-group">
+              <input id="keygen-encrypt-toggle" type="checkbox" checked />
+              <span style="font-weight: 700; font-size: 13.5px;">Encrypt private key with passphrase (PKCS#8 AES-256)</span>
+            </label>
+
+            <div id="keygen-pass-container">
+              <div class="form-group">
+                <label class="form-label">Passphrase</label>
+                <input id="keygen-pass1" type="password" class="text-input" placeholder="Enter a secure passphrase..." />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Confirm Passphrase</label>
+                <input id="keygen-pass2" type="password" class="text-input" placeholder="Confirm passphrase..." />
+              </div>
+            </div>
+
+            <div class="btn-group" style="margin-top: 8px;">
+              <button id="btn-keygen-submit" class="btn btn-primary">
+                <span>&#128273;</span>
+                <span>Generate Key Pair</span>
+              </button>
+            </div>
+
+            <!-- Keygen Result Box -->
+            <div id="keygen-result-box" class="result-banner banner-success hidden">
+              <div class="banner-title">&#10004; Key Pair Generated Successfully!</div>
+              <div class="banner-message">Keys were generated using operating system entropy.</div>
+
+              <div style="margin-top: 12px;">
+                <label class="form-label" style="font-size: 11px;">Public Key Fingerprint (Canonical SHA-256):</label>
+                <div class="mono-display">
+                  <code id="keygen-fp-value"></code>
+                </div>
+              </div>
+
+              <div class="btn-group" style="margin-top: 14px;">
+                <button id="btn-download-priv" class="btn btn-secondary">
+                  <span>&#128272;</span>
+                  <span>Download Private Key (.pem)</span>
+                </button>
+                <button id="btn-download-pub" class="btn btn-secondary">
+                  <span>&#128273;</span>
+                  <span>Download Public Key (.pem)</span>
+                </button>
+              </div>
+
+              <p style="font-size: 11px; margin-top: 12px; color: #a7f3d0;">
+                &#9888; Security Rule (Req 8): Never commit the private key to version control or share it with third parties.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- TAB 4: KEY FINGERPRINT & TRUST                                 -->
+        <!-- ============================================================== -->
+        <section id="tab-fingerprint" class="tab-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Public Key Fingerprint &amp; Trust Validation</h2>
+            <p class="panel-desc">
+              Compute canonical SHA-256 fingerprints over SubjectPublicKeyInfo (DER) representation.
+              Compare with an out-of-band reference to detect public-key substitution attacks (Req 7).
+            </p>
+          </div>
+
+          <div class="card" style="max-width: 720px;">
+            <div class="dropzone-wrapper">
+              <label class="dropzone-label">Public Key (.pem / .pub)</label>
+              <div id="fp-pub-dropzone" class="dropzone">
+                <input type="file" class="dropzone-file-input" accept=".pem,.pub" />
+                <div class="dropzone-idle">
+                  <span class="dropzone-icon">&#128273;</span>
+                  <span class="dropzone-text">Drop public key here</span>
+                  <span class="dropzone-sub">SPKI PEM format</span>
+                </div>
+                <div class="dropzone-preview hidden">
+                  <span class="preview-icon">&#128273;</span>
+                  <div class="preview-info">
+                    <div class="dropzone-file-name"></div>
+                    <div class="dropzone-file-size"></div>
+                  </div>
+                  <button class="dropzone-clear-btn" title="Remove file">&times;</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fingerprint Display -->
+            <div id="fp-display-box" class="hidden" style="margin-top: 16px;">
+              <label class="form-label">Computed SHA-256 Fingerprint</label>
+              <div class="mono-display">
+                <code id="fp-display-value"></code>
+                <button id="btn-copy-fp" class="btn btn-secondary" style="padding: 4px 10px; min-height: auto; font-size: 11px;">Copy</button>
+              </div>
+            </div>
+
+            <!-- Trust Match Section -->
+            <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+              <h3 class="card-title">Out-of-Band Trust Comparison</h3>
+              <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">
+                Paste an expected reference fingerprint received through an authenticated channel (e.g. university registry, phone, signed email).
+              </p>
+
+              <div class="form-group">
+                <input id="fp-expected-hash" type="text" class="text-input" placeholder="e.g. SHA256:56:fe:17:fc:1f:68:09:4e:93:34:a6:9f:9b:fe:fc..." />
+              </div>
+
+              <button id="btn-verify-trust" class="btn btn-accent">
+                <span>&#128270;</span>
+                <span>Verify Fingerprint Match</span>
+              </button>
+
+              <div id="fp-trust-result-box" class="result-banner hidden"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- TAB 5: SECURITY EXPERIMENTS LAB                                -->
+        <!-- ============================================================== -->
+        <section id="tab-experiments" class="tab-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Interactive Security Lab</h2>
+            <p class="panel-desc">
+              Execute the 5 required digital signature security experiments live against the Ed25519 cryptographic core.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="btn-group" style="margin-bottom: 20px;">
+              <button id="btn-run-all-experiments" class="btn btn-primary">
+                <span>&#9654;</span>
+                <span>Execute All 5 Security Experiments</span>
+              </button>
+            </div>
+
+            <div id="experiments-cards-container">
+              <div style="color: var(--text-muted); font-size: 13px;">
+                Click "Execute All 5 Security Experiments" to run the test suite live and inspect the results.
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="/static/js/app.js"></script>
+</body>
+</html>

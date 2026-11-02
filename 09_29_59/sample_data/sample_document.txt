@@ -1,0 +1,17 @@
+================================================================================
+                       UNIVERSITY ACADEMIC CREDENTIAL
+================================================================================
+Institution: Department of Computer Science & Information Security
+Document ID: CERT-2026-ED25519-007
+Issue Date: 2026-10-29
+
+Recipient Name: Aryan
+Student ID: 2026-CS-007
+Degree Conferred: Bachelor of Technology in Computer Science & Engineering
+Specialization: Cryptography & Network Security
+Status: Official Synthetic University Certificate
+
+This official document is cryptographically signed using Ed25519.
+Any modification to the characters, whitespace, or layout will cause
+cryptographic verification to fail.
+================================================================================

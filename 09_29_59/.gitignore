@@ -1,0 +1,68 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Unit test / coverage reports
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Audit reports and local assessment artifacts
+*.pdf
+*audit*
+scripts/
+
+# CRITICAL SECURITY REQUIREMENT (PDF Req 8):
+# Never commit private signing keys or credentials to the repository!
+*.key
+*.priv
+*private_key*
+*.pem.priv
+private/
+keys/private/
+*.p8
+*.pkcs8
+
+# Node / Electron build artifacts
+node_modules/
