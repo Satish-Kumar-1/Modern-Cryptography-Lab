@@ -1,0 +1,7 @@
+CERTIFICATE OF COMPLETION
+
+This is to certify that Alice Sharma has successfully completed the
+course "Introduction to Cryptography" with a grade of A.
+
+Issued by: Department of Computer Science
+Date: 31 October 2026
