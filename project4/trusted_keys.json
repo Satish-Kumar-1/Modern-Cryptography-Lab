@@ -1,0 +1,6 @@
+{
+  "alice": {
+    "fingerprint": "f6192a9da2486af18c2442d35100dbe2e4aff6d60576e43a01889e75e67c9f0c",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA0VD06BZRqcc3FFm9eoa9l6cLHmr6lHU5BTy/qSJkxyo=\n-----END PUBLIC KEY-----\n"
+  }
+}
