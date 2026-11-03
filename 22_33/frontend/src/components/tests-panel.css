@@ -1,0 +1,206 @@
+.manual-lab {
+  background: var(--muted);
+  color: var(--foreground);
+  padding: 24px;
+  min-height: 100%;
+}
+.manual-lab header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.manual-lab h2 {
+  font-size: 28px;
+  margin: 6px 0;
+}
+.manual-lab h3 {
+  font-size: 18px;
+  margin: 12px 0;
+}
+.manual-lab p {
+  line-height: 1.6;
+  margin: 10px 0;
+}
+.manual-lab nav,
+.lab-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+.manual-lab nav button {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--background);
+  padding: 9px 12px;
+  cursor: pointer;
+}
+.manual-lab nav button[aria-pressed="true"] {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.lab-instruction {
+  padding: 16px;
+  border-left: 3px solid var(--border);
+  background: var(--muted);
+}
+.manual-lab fieldset {
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+.lab-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.manual-lab article {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+  min-width: 0;
+}
+.manual-lab label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 14px 0;
+}
+.manual-lab textarea,
+.manual-lab select {
+  display: block;
+  background: var(--background);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px;
+  width: 100%;
+  margin-top: 6px;
+  font:
+    13px ui-monospace,
+    monospace;
+}
+.manual-lab textarea {
+  min-height: 65px;
+  resize: vertical;
+}
+.manual-lab pre,
+.lab-user-details pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font:
+    12px/1.6 ui-monospace,
+    monospace;
+  background: var(--muted);
+  padding: 10px;
+  max-height: 280px;
+  overflow: auto;
+}
+.manual-lab details {
+  margin: 12px 0;
+}
+.manual-lab summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+.manual-lab button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.manual-lab button {
+  white-space: normal;
+  height: auto;
+  min-height: 34px;
+}
+.manual-lab code {
+  overflow-wrap: anywhere;
+}
+.manual-lab .lab-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.lab-decisions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+.lab-decisions div {
+  background: var(--muted);
+  padding: 12px;
+}
+.lab-decisions dt {
+  font-size: 12px;
+}
+.lab-decisions dd {
+  font-weight: 600;
+  margin: 5px 0 0;
+  overflow-wrap: anywhere;
+}
+.lab-inbox-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  text-align: left;
+  padding: 12px;
+  border: 1px solid var(--border);
+  margin-top: 8px;
+  background: var(--background);
+  overflow-wrap: anywhere;
+}
+.lab-capture {
+  border-top: 2px solid var(--border);
+  margin-top: 20px;
+}
+.lab-user-details {
+  padding: 12px;
+  font-size: 12px;
+  overflow: hidden;
+}
+@media (max-width: 1000px) {
+  .lab-columns {
+    grid-template-columns: 1fr;
+  }
+  .manual-lab {
+    padding: 14px;
+  }
+  .manual-lab header {
+    flex-direction: column;
+  }
+}
+
+.lab-guided-action {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  max-width: 100%;
+}
+.lab-step-hint {
+  display: block;
+  color: var(--foreground);
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 4px 0 8px;
+}
+.lab-key-tables [data-slot="table"] {
+  table-layout: fixed;
+  min-width: 340px;
+}
+.lab-key-tables [data-slot="table-cell"],
+.lab-key-tables [data-slot="table-head"] {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  vertical-align: top;
+}
+.lab-key-tables code {
+  font: 11px/1.6 var(--font-mono);
+}
+.lab-columns {
+  align-items: start;
+}

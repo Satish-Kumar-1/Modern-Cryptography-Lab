@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: signedchat-backend
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/users
+    envVars:
+      - key: FRONTEND_ORIGIN
+        value: https://signedchat-messaging-lab.freerhea16.chatgpt.site
