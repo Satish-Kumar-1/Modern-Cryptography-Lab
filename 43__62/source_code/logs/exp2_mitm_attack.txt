@@ -1,0 +1,12 @@
+==============================================================================
+EXPERIMENT 2: UNAUTHENTICATED MAN-IN-THE-MIDDLE
+==============================================================================
+[*] Mallory replaces Bob's public value before it reaches Alice.
+[*] Mallory separately replaces Alice's public value before it reaches Bob.
+Alice-Mallory key fingerprint: 1fb2c887925d5914
+Mallory-Bob key fingerprint:   74cd42144d0008a5
+[+] Mallory established two different shared keys.
+[*] Alice encrypts a message. Mallory decrypts, modifies, and re-encrypts it.
+Mallory read: Transfer 100 to account 4455
+Bob received: Transfer 100 to account 6666
+[+] The unauthenticated MITM attack succeeded: both encrypted hops passed AES-GCM.

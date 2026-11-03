@@ -1,0 +1,10 @@
+==============================================================================
+EXPERIMENT 3: AUTHENTICATED KEY EXCHANGE
+==============================================================================
+[+] Valid signed public values were accepted; authenticated message delivered.
+[*] Test 1: substitute Alice's DH value but keep her original signature.
+[+] Substituted DH value rejected.
+[*] Test 2: Mallory signs a substituted value with her own untrusted key.
+[+] Signature from an untrusted key rejected.
+[*] Test 3: attempt role/reflection confusion.
+[+] Role mismatch rejected.

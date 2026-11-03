@@ -1,0 +1,12 @@
+==============================================================================
+EXPERIMENT 4: AES-GCM TAMPERING DETECTION
+==============================================================================
+[+] Untampered ciphertext decrypted successfully.
+[*] Testing modified ciphertext.
+[+] Modified ciphertext rejected (InvalidTag).
+[*] Testing modified authentication tag.
+[+] Modified authentication tag rejected (InvalidTag).
+[*] Testing modified nonce.
+[+] Modified nonce rejected (InvalidTag).
+[*] Testing modified AAD.
+[+] Modified AAD rejected (InvalidTag).

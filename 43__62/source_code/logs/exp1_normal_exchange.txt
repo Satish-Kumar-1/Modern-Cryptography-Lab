@@ -1,0 +1,9 @@
+==============================================================================
+EXPERIMENT 1: HONEST DIFFIE-HELLMAN EXCHANGE
+==============================================================================
+[*] Alice and Bob exchange public DH values.
+Alice key fingerprint: 788509725df55569
+Bob key fingerprint:   788509725df55569
+[+] Both parties independently derived the same AES key.
+Recovered message: Hello Bob, this is Alice.
+[+] AES-GCM encryption and decryption succeeded.
