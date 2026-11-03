@@ -1,0 +1,21 @@
+Secure File Encryption and Tamper Detection - Validation Results
+Date: 2026-10-29 (Asia/Calcutta)
+Compiler: GCC 15.2.0, C++17
+Crypto library: OpenSSL 3.5.2
+Build: CMake 4.1.0 + Ninja (successful)
+
+Command: build\crypto.exe test
+
+PASS - Ciphertext tampering: a one-bit ciphertext change was rejected by GCM authentication
+PASS - Tag modification: a one-bit authentication-tag change was rejected
+PASS - Wrong-key attack: a different 256-bit key could not authenticate the data
+PASS - Nonce reuse analysis: reusing key+nonce made C1 XOR C2 equal P1 XOR P2, leaking plaintext relationships; GCM nonce reuse also exposes authentication relationships that can enable forgeries
+PASS - Correctness verification: fresh-nonce encryption decrypted to bytes identical to the original
+ALL TESTS PASSED
+
+End-to-end sample validation:
+- sample.txt encrypted successfully (149 plaintext bytes)
+- sample_encrypted.bin decrypted and authenticated successfully (149 recovered bytes)
+- Original SHA-256:  736982D41FC5D068EB0C6365984F61E69030DF117E04D3C44F9ACB06408383D6
+- Recovered SHA-256: 736982D41FC5D068EB0C6365984F61E69030DF117E04D3C44F9ACB06408383D6
+- Result: byte-for-byte recovery verified

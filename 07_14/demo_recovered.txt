@@ -1,0 +1,3 @@
+Project 1 demonstration file.
+AES-256-GCM protects confidentiality and detects tampering.
+Every normal encryption uses a fresh random key and nonce.
