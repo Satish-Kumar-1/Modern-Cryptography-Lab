@@ -1,0 +1,6 @@
+# Never commit private keys
+*.key
+*private*.pem
+*_private*
+keys_private/
+__pycache__/
