@@ -1,0 +1,13 @@
+{
+  "envelope": {
+    "counter": 2,
+    "encrypted": true,
+    "msg_id": "621ddbcb-8e3f-4d69-81a6-053455385915",
+    "nonce": "sYs/fXABZM/b7O1C",
+    "payload": "ckzPP7DZlHqsGCkM98IOxS2TyKqDhLaJapyO49nxBmPRJFvcDcQiDqqep31Lk/5L",
+    "recipient": "Bob",
+    "sender": "Alice",
+    "timestamp": 1793595973
+  },
+  "signature": "68S+g6RgK3rdP7oPCUzm728S9U2aEvWAuyaUkb3767OkNSVTY/oxPkONBhF0YMk0SCvCpkZ3W01nzUXlBI/SAw=="
+}

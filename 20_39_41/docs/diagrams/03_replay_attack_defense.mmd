@@ -1,0 +1,33 @@
+sequenceDiagram
+    autonumber
+    actor Alice as Alice (Sender)
+    actor Mallory as Mallory (Eavesdropper / Replayer)
+    actor Bob as Bob (Recipient)
+
+    Alice->>Bob: Send Valid Packet P1 (counter=1, timestamp=T0, payload="Pay $50 to contractor")
+    Note over Mallory: Passively records exact JSON Packet P1 off the wire
+    Bob->>Bob: Verify Signature + Check (Alice, 1) not seen -> Record last_counter["Alice"] = 1
+    Bob-->>Bob: Accept P1 (status_code="SUCCESS")
+
+    Note over Mallory,Bob: Attack Phase: Mallory replays recorded Packet P1
+    Mallory->>Bob: Retransmit identical Packet P1 (counter=1)
+
+    rect rgb(80, 20, 20)
+        Note over Bob: Part A: Replay Defense OFF (enforce_replay_defense=False)
+        Bob->>Bob: Ed25519.Verify(PK_Alice, P1) -> Mathematically Valid!
+        Bob-->>Bob: valid=True, status_code="SUCCESS" (CRITICAL: Duplicate $50 payment executed!)
+    end
+
+    rect rgb(20, 65, 35)
+        Note over Bob: Part B: Replay Defense ON (enforce_replay_defense=True)
+        Bob->>Bob: Ed25519.Verify(PK_Alice, P1) -> Valid
+        Bob->>Bob: Check counter=1 <= last_counter["Alice"] (1) OR ("Alice", 1) in seen_messages
+        Bob-->>Bob: valid=False, status_code="REPLAY_DETECTED" (Duplicate rejected!)
+    end
+
+    rect rgb(20, 65, 35)
+        Note over Mallory,Bob: Part C: Mallory increments P1["envelope"]["counter"] = 2 without SK_Alice
+        Mallory->>Bob: Send modified P1' (counter=2, original signature for counter=1)
+        Bob->>Bob: Ed25519.Verify(PK_Alice, canonical_bytes(counter=2), sig(counter=1))
+        Bob-->>Bob: valid=False, status_code="INVALID_SIGNATURE" (Tampering blocked!)
+    end

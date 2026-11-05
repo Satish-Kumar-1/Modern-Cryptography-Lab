@@ -1,0 +1,13 @@
+{
+  "envelope": {
+    "counter": 1,
+    "encrypted": false,
+    "msg_id": "be7c3b94-b842-4aa3-b19c-7fb1b56632e7",
+    "nonce": null,
+    "payload": "Meet me at the library at 4 PM. Bring the project notes.",
+    "recipient": "Bob",
+    "sender": "Alice",
+    "timestamp": 1793595973
+  },
+  "signature": "HPRx9GNjeUoxzGaxGPMoNHWfuVW0O/y4QWQTGXNYGoU+UcU7A6QZw1NXJnfiSeqiK2g1XYFzvMn6DUs5Kbs3Dw=="
+}

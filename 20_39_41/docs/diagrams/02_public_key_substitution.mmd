@@ -1,0 +1,28 @@
+sequenceDiagram
+    autonumber
+    actor Mallory as Mallory (MITM Attacker)
+    participant Dir as PublicKeyDirectory
+    actor Bob as Bob (Recipient)
+
+    Note over Mallory,Dir: Attack Setup: Mallory compromises the central directory
+    Mallory->>Dir: tamper_registry_key("Alice", PK_Mallory)
+    Note right of Dir: registry["Alice"] = PK_Mallory<br/>trusted_fingerprints["Alice"] remains SHA-256(PK_Alice)
+
+    Mallory->>Mallory: Craft envelope with "sender": "Alice", sign with SK_Mallory
+    Mallory->>Bob: Send forged_packet
+
+    rect rgb(80, 20, 20)
+        Note over Bob,Dir: Part A: Vulnerable Mode (verify_key_fingerprint=False)
+        Bob->>Dir: get_public_key("Alice", verify_fingerprint=False)
+        Dir-->>Bob: Returns PK_Mallory (Unauthenticated!)
+        Bob->>Bob: Ed25519.Verify(PK_Mallory, envelope, sig_Mallory) -> PASSES!
+        Bob-->>Bob: valid=True, status_code="SUCCESS" (CRITICAL VULNERABILITY: Forgery Accepted)
+    end
+
+    rect rgb(20, 65, 35)
+        Note over Bob,Dir: Part B: Defended Mode (verify_key_fingerprint=True)
+        Bob->>Dir: get_public_key("Alice", verify_fingerprint=True)
+        Dir->>Dir: Compare SHA-256(PK_Mallory) != trusted_fingerprints["Alice"]
+        Dir-->>Bob: Raises SecurityError("PUBLIC KEY SUBSTITUTION DETECTED")
+        Bob-->>Bob: valid=False, status_code="KEY_SUBSTITUTION_DETECTED" (ATTACK BLOCKED)
+    end

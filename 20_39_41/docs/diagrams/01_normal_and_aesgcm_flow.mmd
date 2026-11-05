@@ -1,0 +1,35 @@
+sequenceDiagram
+    autonumber
+    actor Alice as Alice (Sender)
+    participant Dir as PublicKeyDirectory
+    participant Wire as Network Wire (Untrusted)
+    actor Bob as Bob (Recipient)
+
+    Note over Alice,Bob: Setup Phase: Key Registration & Out-of-Band Fingerprint Pinning
+    Alice->>Dir: register_user("Alice", PK_Alice, update_trusted_fingerprint=True)
+    Bob->>Dir: register_user("Bob", PK_Bob, update_trusted_fingerprint=True)
+
+    Note over Alice: 1. Counter Increment & Optional AEAD Encryption
+    Alice->>Alice: counter += 1, timestamp = UTC_NOW(), msg_id = UUIDv4()
+    opt Optional Confidentiality Extension (shared_aes_key provided)
+        Alice->>Alice: nonce = os.urandom(12)
+        Alice->>Alice: ciphertext = AES-256-GCM.Encrypt(shared_aes_key, nonce, plaintext, AAD=None)
+        Alice->>Alice: payload = Base64(ciphertext), encrypted = True
+    end
+
+    Note over Alice: 2. Canonical Serialization & Ed25519 Signing (Encrypt-then-Sign)
+    Alice->>Alice: canonical_bytes = json.dumps(envelope, sort_keys=True, separators=(',',':'))
+    Alice->>Alice: signature = Ed25519.Sign(SK_Alice, canonical_bytes)
+    Alice->>Wire: Transmit JSON Packet {"envelope": envelope, "signature": Base64(signature)}
+
+    Wire->>Bob: Deliver JSON Packet
+    Note over Bob: 3. Verification Order of Operations
+    Bob->>Dir: get_public_key("Alice", verify_fingerprint=True)
+    Dir-->>Bob: Return PK_Alice (Verified against SHA-256(PK_Alice) == trusted_fingerprint)
+    Bob->>Bob: Reconstruct canonical_bytes from packet["envelope"]
+    Bob->>Bob: Ed25519.Verify(PK_Alice, canonical_bytes, signature)
+    Bob->>Bob: Verify Replay State: (sender, counter) not in seen_messages & counter > last_counter & |now - timestamp| <= 300s
+    opt If envelope["encrypted"] == True
+        Bob->>Bob: plaintext = AES-256-GCM.Decrypt(shared_aes_key, nonce, ciphertext, AAD=None)
+    end
+    Bob-->>Bob: Return {"valid": True, "status_code": "SUCCESS", "plaintext": plaintext}
